@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tejraj Singh | Full Stack Developer Portfolio</title>
+    <script>
+      // Safeguard window.fetch writeability in sandboxed environments
+      try {
+        const trueWindow = window;
+        let customFetch = trueWindow.fetch;
+
+        const customGlobalThis = new Proxy(trueWindow, {
+          get(target, prop) {
+            if (prop === 'fetch') {
+              return customFetch;
+            }
+            if (prop === 'globalThis' || prop === 'window' || prop === 'self') {
+              return customGlobalThis;
+            }
+            const value = Reflect.get(target, prop);
+            if (typeof value === 'function') {
+              return typeof value.bind === 'function' ? value.bind(target) : value;
+            }
+            return value;
+          },
+          set(target, prop, val) {
+            if (prop === 'fetch') {
+              customFetch = val;
+              return true;
+            }
+            return Reflect.set(target, prop, val);
+          },
+          has(target, prop) {
+            return Reflect.has(target, prop);
+          }
+        });
+
+        // Redefine global properties to point to the secure writable Proxy
+        try {
+          Object.defineProperty(trueWindow, 'globalThis', {
+            value: customGlobalThis,
+            configurable: true,
+            writable: true,
+            enumerable: true
+          });
+        } catch (e) {}
+
+        try {
+          Object.defineProperty(trueWindow, 'self', {
+            value: customGlobalThis,
+            configurable: true,
+            writable: true,
+            enumerable: true
+          });
+        } catch (e) {}
+
+        try {
+          Object.defineProperty(trueWindow, 'window', {
+            value: customGlobalThis,
+            configurable: true,
+            writable: true,
+            enumerable: true
+          });
+        } catch (e) {}
+      } catch (e) {
+        console.warn('Could not set up global sandbox proxies:', e);
+      }
+
+      // Safeguard FormData keys to prevent formdata-polyfill from executing and crashing on getter-only environments
+      try {
+        if (typeof FormData !== 'undefined') {
+          if (!FormData.prototype.keys) {
+            FormData.prototype.keys = function* () {
+              for (const [key] of this.entries()) {
+                yield key;
+              }
+            };
+          }
+          if (!FormData.prototype.values) {
+            FormData.prototype.values = function* () {
+              for (const [, val] of this.entries()) {
+                yield val;
+              }
+            };
+          }
+          if (!FormData.prototype.entries) {
+            FormData.prototype.entries = function* () {
+              // Return empty/noop fallback generator if native is fully missing
+            };
+          }
+        }
+      } catch (e) {
+        console.warn('Could not polyfill FormData prototype:', e);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

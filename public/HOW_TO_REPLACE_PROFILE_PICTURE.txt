@@ -1,0 +1,25 @@
+================================================================================
+HOW TO REPLACE THE PORTFOLIO PROFILE PICTURE WITH YOUR PERSONAL PHOTO
+================================================================================
+
+To display your personal picture (e.g., the professional leather jacket photo with headphones)
+on the Hero and About sections of your portfolio, follow these incredibly simple steps:
+
+1. Locate the image file on your computer (for example, "photo.jpg" or "profile.jpg").
+2. Rename the image file to precisely: "profile.jpg" (all lowercase).
+3. In the left panel/file explorer of this AI Studio coding workspace:
+   - Expand or click on the "public" folder.
+   - Click "Upload files" (or drag-and-drop your renamed "profile.jpg" file directly into the "public" folder).
+4. Refresh your live portfolio preview page!
+
+--------------------------------------------------------------------------------
+HOW IT WORKS:
+--------------------------------------------------------------------------------
+The portfolio code is configured to try loading "/profile.jpg" (which is mapped to the "public"
+folder) as your primary layout picture.
+
+If you haven't uploaded a "profile.jpg" file yet, the portfolio will automatically and gracefully
+fall back to serving a highly stunning, premium, studio-lighted professional South Asian/Indian
+developer portrait from Unsplash ('images.unsplash.com/photo-1531427186611-ecfd6d936c79') of identical
+visual styling so your portfolio is always complete and absolutely beautiful out of the box!
+================================================================================

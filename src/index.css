@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+:root {
+  --bg-primary: #F7F6F3;
+  --text-secondary: #555555;
+  --border-custom: #E5E5E5;
+  --glow-hover: rgba(244,178,62,0.25);
+  --text-color: #000000;
+}
+
+.dark {
+  --bg-primary: #080808;
+  --text-secondary: #a3a3a3;
+  --border-custom: #1a1a1a;
+  --glow-hover: rgba(244,178,62,0.15);
+  --text-color: #f5f5f5;
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  
+  --color-gold-accent: #F4B23E;
+  --color-gold-dark: #D88A1D;
+  --color-bg-primary: var(--bg-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border-custom: var(--border-custom);
+  --color-glow-hover: var(--glow-hover);
+  
+  --radius-4xl: 40px;
+}
+
+/* Enable class-based dark: modifier in Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  html {
+    background-color: var(--bg-primary);
+    color: var(--text-color);
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  
+  ::selection {
+    background-color: #F4B23E;
+    color: #000000;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Custom text reveal effect classes */
+.text-stroke-white {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+  color: transparent;
+}
+
+.text-stroke-black {
+  -webkit-text-stroke: 1px rgba(0, 0, 0, 0.2);
+  color: transparent;
+}
+
+.dark .text-stroke-black {
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.25);
+  color: transparent;
+}
+
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 40s linear infinite;
+}
+
+
