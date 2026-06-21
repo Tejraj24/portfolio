@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import CustomCursor from './components/CustomCursor';
 import Navbar from './components/Navbar';
+import Preloader from './components/Preloader';
 import Hero from './components/Hero';
 import About from './components/About';
 import Experience from './components/Experience';
@@ -23,6 +24,7 @@ export default function App() {
   const [activeSection, setActiveSection] = useState('home');
   const [view, setView] = useState<'home' | 'portfolio'>('home');
   const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isPreloading, setIsPreloading] = useState(true);
 
   useEffect(() => {
     const sections = ['home', 'about', 'projects', 'experience', 'skills', 'contact'];
@@ -68,7 +70,9 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-bg-primary selection:bg-gold-accent selection:text-black antialiased overflow-x-hidden">
+    <div className={`relative min-h-screen bg-bg-primary selection:bg-gold-accent selection:text-black antialiased ${isPreloading ? 'overflow-hidden max-h-screen' : 'overflow-x-hidden'}`}>
+      {isPreloading && <Preloader onComplete={() => setIsPreloading(false)} />}
+
       {/* Premium lagging interactive cursor */}
       <CustomCursor />
 

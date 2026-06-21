@@ -59,34 +59,25 @@ export default function Hero({ onExploreProjects, onContactMe, onOpenResume }: H
 
           {/* Huge Editorial Headline */}
           <div className="space-y-4" id="hero-title-container">
+            <motion.div
+              className="font-mono text-xs md:text-sm uppercase tracking-[0.3em] text-gold-accent font-bold"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+            >
+              JACK OF CURIOSITY , MASTER OF CREATION
+            </motion.div>
+
             <motion.h1
-              className="font-display font-black text-black dark:text-white leading-[0.8] tracking-tighter uppercase"
-              style={{ fontSize: 'clamp(3rem, 9.5vw, 6.8rem)' }}
-              initial={{ opacity: 0, y: 80 }}
+              className="font-display font-black text-black dark:text-white leading-[1] tracking-tighter uppercase flex flex-wrap gap-x-4"
+              style={{ fontSize: 'clamp(2.5rem, 8vw, 6.8rem)' }}
+              initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             >
-              Tejraj<br />
-              <span className="text-stroke-black dark:text-stroke-white text-transparent block">Singh</span>
+              <span>Tejraj</span>
+              <span className="text-stroke-black dark:text-stroke-white text-transparent">Singh</span>
             </motion.h1>
-
-            <motion.p
-              className="font-sans text-black dark:text-neutral-200 font-semibold text-base md:text-lg max-w-xl leading-relaxed pt-2"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.8 }}
-            >
-              Building AI-Powered and Full-Stack Applications That Solve Real-World Problems.
-            </motion.p>
-            
-            <motion.p
-              className="font-sans text-text-secondary dark:text-neutral-450 text-sm leading-relaxed max-w-xl opacity-90"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            >
-              I am a Software Product Engineering student passionate about building scalable web applications, AI-powered solutions, and modern digital products. I enjoy transforming ideas into practical software using modern technologies including React, Node.js, MongoDB, APIs, and AI tools.
-            </motion.p>
           </div>
 
           {/* Interactive CTAs */}
