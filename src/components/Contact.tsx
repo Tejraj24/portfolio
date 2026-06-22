@@ -88,16 +88,16 @@ export default function Contact() {
         TRANSMISSION CHANNEL // SEC_06
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-16 items-start">
         
         {/* Left Side: Enormous Heading + Info links */}
-        <div className="lg:col-span-5 space-y-12" id="contact-coordinates">
+        <div className="xl:col-span-6 space-y-12" id="contact-coordinates">
           <div className="space-y-4">
             <span className="font-mono text-xs text-gold-dark uppercase tracking-widest block font-semibold">GET IN CONTACT</span>
-            <h2 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl text-black dark:text-white leading-tight tracking-tighter uppercase">
+            <h2 className="font-display font-black text-5xl sm:text-6xl md:text-7xl xl:text-6xl 2xl:text-7xl text-black dark:text-white leading-tight tracking-tighter uppercase">
               LET'S BUILD <br />
-              SOMETHING <br />
-              <span className="text-stroke-black text-black dark:text-white font-black">AMAZING.</span>
+              <span className="whitespace-nowrap">SOMETHING</span> <br />
+              <span className="text-stroke-black text-black dark:text-white font-black whitespace-nowrap">AMAZING.</span>
             </h2>
             <p className="font-sans text-text-secondary text-sm md:text-base leading-relaxed max-w-sm pt-2">
               I am always open to discussing development opportunities, collaborations, innovative projects, and technology-related conversations.
@@ -162,7 +162,7 @@ export default function Contact() {
         </div>
 
         {/* Right Side: Luxury submission input form with state handlers */}
-        <div className="lg:col-span-7" id="contact-form-portal">
+        <div className="xl:col-span-6" id="contact-form-portal">
           <div className="bg-white dark:bg-neutral-900 border border-border-custom dark:border-neutral-800 rounded-4xl p-8 md:p-12 shadow-xl relative overflow-hidden">
             
             {/* Embedded Header info inside card */}

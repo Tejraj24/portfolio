@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Github, 
@@ -15,7 +15,11 @@ import {
   Award,
   Sparkles,
   ArrowUpRight,
-  ExternalLink
+  ExternalLink,
+  ChevronLeft,
+  ChevronRight,
+  Share2,
+  Check
 } from 'lucide-react';
 import { Project } from '../types';
 import { PROJECTS as ALL_GALLERY_PROJECTS } from '../data';
@@ -29,6 +33,7 @@ export default function PortfolioPage({ onBackToHome }: PortfolioPageProps) {
   const [filter, setFilter] = useState<'all' | 'ai' | 'fullstack' | 'frontend'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProject, setSelectedProject] = useState<typeof ALL_GALLERY_PROJECTS[0] | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const filterTabs = [
     { label: 'All Work', id: 'all' },
@@ -48,6 +53,49 @@ export default function PortfolioPage({ onBackToHome }: PortfolioPageProps) {
       return matchesCategory && matchesQuery;
     });
   }, [filter, searchQuery]);
+
+  const currentIndex = selectedProject ? filteredAndSorted.findIndex(p => p.id === selectedProject.id) : -1;
+  const totalProjects = filteredAndSorted.length;
+
+  const handlePrevious = React.useCallback(() => {
+    if (currentIndex > 0) setSelectedProject(filteredAndSorted[currentIndex - 1]);
+    else if (currentIndex === 0 && totalProjects > 0) setSelectedProject(filteredAndSorted[totalProjects - 1]);
+  }, [currentIndex, filteredAndSorted, totalProjects]);
+
+  const handleNext = React.useCallback(() => {
+    if (currentIndex >= 0 && currentIndex < totalProjects - 1) setSelectedProject(filteredAndSorted[currentIndex + 1]);
+    else if (currentIndex === totalProjects - 1 && totalProjects > 0) setSelectedProject(filteredAndSorted[0]);
+  }, [currentIndex, filteredAndSorted, totalProjects]);
+
+  React.useEffect(() => {
+    if (!selectedProject) return;
+    
+    // Lock body scroll
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedProject(null);
+      if (e.key === 'ArrowLeft') handlePrevious();
+      if (e.key === 'ArrowRight') handleNext();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedProject, handlePrevious, handleNext]);
+
+  const handleShare = async () => {
+    if (!selectedProject) return;
+    try {
+      const message = `Check out Tejraj's project: ${selectedProject.title} - ${selectedProject.liveUrl || selectedProject.githubUrl}`;
+      await navigator.clipboard.writeText(message);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy', err);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-neutral-950 text-white pt-24 pb-20 relative overflow-hidden selection:bg-gold-accent selection:text-black">
@@ -116,16 +164,23 @@ export default function PortfolioPage({ onBackToHome }: PortfolioPageProps) {
             <button
               key={tab.id}
               onClick={() => setFilter(tab.id as any)}
-              className={`px-5 py-2.5 rounded-full font-mono text-xs uppercase font-medium tracking-wider transition-all duration-300 interactive-cursor relative ${
+              className={`relative px-5 py-2.5 rounded-full font-mono text-xs uppercase font-medium tracking-wider transition-all duration-300 interactive-cursor ${
                 filter === tab.id
-                  ? 'bg-gold-accent text-black font-semibold shadow-md'
-                  : 'text-gray-400 bg-neutral-900/40 border border-neutral-800 hover:text-white hover:bg-neutral-900'
+                  ? 'text-black font-semibold shadow-md border-transparent'
+                  : 'text-gray-400 border border-neutral-800 hover:text-white bg-neutral-900/40 hover:bg-neutral-900'
               }`}
               id={`portfolio-tab-${tab.id}`}
             >
-              {tab.label}
               {filter === tab.id && (
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-black border-2 border-gold-accent rounded-full animate-bounce" />
+                <motion.div
+                  layoutId="activePortfolioTab"
+                  className="absolute inset-0 bg-gold-accent rounded-full z-0"
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{tab.label}</span>
+              {filter === tab.id && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-black border-2 border-gold-accent rounded-full animate-bounce z-20" />
               )}
             </button>
           ))}
@@ -248,6 +303,21 @@ export default function PortfolioPage({ onBackToHome }: PortfolioPageProps) {
             {/* Modal backdrop background clicking closer */}
             <div className="absolute inset-0" onClick={() => setSelectedProject(null)} />
 
+            {/* Tactile Nav Controllers - Desktop */}
+            {totalProjects > 1 && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); handlePrevious(); }}
+                  className="hidden md:flex absolute left-8 top-1/2 -translate-y-1/2 z-50 w-14 h-14 rounded-full bg-neutral-900/90 border border-neutral-800 text-white hover:bg-gold-accent hover:text-black hover:scale-110 transition-all duration-300 items-center justify-center shadow-2xl backdrop-blur-md"
+                  title="Previous Project (Left Arrow)"
+                >
+                  <ChevronLeft className="w-6 h-6" />
+                </button>
+                {/* Right chevron goes outside the slide panel for symmetry if we want, or inside. For slide panel, let's keep it next to the left chevron but shifted right. Actually, the panel is on the right. So left chevron is outside, right chevron can be inside or outside. Let's put both on the left side of the panel, or one on left of screen, one inside panel. The panel takes up max-w-3xl. */}
+                {/* Let's attach them to the panel boundary */}
+              </>
+            )}
+
             {/* Sliding detailed panel content bar */}
             <motion.div
               className="bg-neutral-900 border-l border-neutral-800 w-full max-w-3xl h-full flex flex-col justify-between p-8 md:p-12 overflow-y-auto relative z-10 shadow-2xl"
@@ -259,9 +329,16 @@ export default function PortfolioPage({ onBackToHome }: PortfolioPageProps) {
             >
               {/* Close Button top row */}
               <div className="flex justify-between items-center pb-6 border-b border-neutral-800 mb-8">
-                <span className="font-mono text-[10px] text-gray-500 uppercase tracking-widest">
-                  CASE DOSSIER // {selectedProject.id.toUpperCase()}
-                </span>
+                <div className="flex items-center space-x-4">
+                  <span className="font-mono text-[10px] text-gray-500 uppercase tracking-widest">
+                    CASE DOSSIER // {selectedProject.id.toUpperCase()}
+                  </span>
+                  {totalProjects > 1 && (
+                    <span className="font-mono text-[10px] tracking-widest uppercase text-gold-accent bg-neutral-950/80 border border-neutral-800 px-3 py-1 rounded-full shadow-sm">
+                      {currentIndex + 1} OF {totalProjects}
+                    </span>
+                  )}
+                </div>
                 <button 
                   onClick={() => setSelectedProject(null)}
                   className="w-10 h-10 border border-neutral-800 rounded-full hover:bg-neutral-800 transition-colors flex items-center justify-center cursor-pointer text-gray-400 hover:text-white"
@@ -271,15 +348,44 @@ export default function PortfolioPage({ onBackToHome }: PortfolioPageProps) {
                 </button>
               </div>
 
+              {/* Tactile Nav Controllers - Mobile */}
+              {totalProjects > 1 && (
+                <div className="flex md:hidden space-x-2 mb-6">
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handlePrevious(); }}
+                    className="flex-1 flex justify-center py-3 bg-neutral-950 border border-neutral-800 rounded-full text-white hover:bg-gold-accent hover:text-black transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                    className="flex-1 flex justify-center py-3 bg-neutral-950 border border-neutral-800 rounded-full text-white hover:bg-gold-accent hover:text-black transition-colors"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+              )}
+
               {/* Main Content Info */}
               <div className="space-y-8 flex-grow">
                 {/* Large responsive graphic preview gallery */}
-                <div className="relative w-full rounded-3xl overflow-hidden bg-neutral-950 p-4 border border-neutral-800/80">
+                <div className="relative w-full rounded-3xl overflow-hidden bg-neutral-950 p-4 border border-neutral-800/80 group">
                   <ProjectGallery 
                     projectId={selectedProject.id} 
                     fallbackImage={selectedProject.image} 
                     projectTitle={selectedProject.title} 
                   />
+                  
+                  {/* Right Chevron overlay on image for desktop */}
+                  {totalProjects > 1 && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                      className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 rounded-full bg-neutral-900/80 border border-neutral-800 text-white hover:bg-gold-accent hover:text-black hover:scale-110 transition-all duration-300 items-center justify-center shadow-xl opacity-0 group-hover:opacity-100"
+                      title="Next Project (Right Arrow)"
+                    >
+                      <ChevronRight className="w-6 h-6" />
+                    </button>
+                  )}
                 </div>
 
                 {/* Project Titles & Category tags */}
@@ -362,31 +468,45 @@ export default function PortfolioPage({ onBackToHome }: PortfolioPageProps) {
               </div>
 
               {/* Backlinks links row */}
-              <div className="flex sm:items-center justify-between pt-8 mt-8 border-t border-neutral-800 gap-4 flex-col sm:flex-row">
-                <div className="flex space-x-3.5">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pt-8 mt-8 border-t border-neutral-800 gap-4">
+                <div className="flex space-x-3.5 flex-wrap gap-y-3">
                   <a
                     href={selectedProject.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center space-x-2 border border-neutral-800 bg-neutral-950 hover:border-gold-accent hover:text-gold-accent px-5 py-3 rounded-full font-mono text-xs transition-all duration-300"
+                    title="Examine Source Code"
                   >
                     <Github className="w-4 h-4" />
-                    <span>Source Repository</span>
+                    <span className="hidden sm:inline">Source Repository</span>
                   </a>
                   <a
                     href={selectedProject.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center space-x-2 bg-white text-black hover:bg-gold-accent hover:text-black px-5 py-3 rounded-full font-mono text-xs font-bold transition-all duration-300"
+                    title="Launch Live System"
                   >
                     <Globe className="w-4 h-4" />
-                    <span>Live Showcase</span>
+                    <span className="hidden sm:inline">Live Showcase</span>
                   </a>
+                  <button
+                    onClick={handleShare}
+                    className={`flex items-center space-x-2 px-5 py-3 rounded-full font-mono text-xs transition-all duration-300 border ${
+                      copied 
+                        ? 'bg-green-500/20 border-green-500 text-green-400' 
+                        : 'bg-neutral-950 border-neutral-800 hover:border-gold-accent text-gray-400 hover:text-gold-accent'
+                    }`}
+                    title="Share Dossier"
+                  >
+                    {copied ? <Check className="w-4 h-4" /> : <Share2 className="w-4 h-4" />}
+                    <span className="hidden sm:inline">{copied ? "Copied" : "Share"}</span>
+                  </button>
                 </div>
 
                 <button 
                   onClick={() => setSelectedProject(null)}
-                  className="font-mono text-[10px] uppercase text-gray-500 hover:text-white transition-colors"
+                  className="font-mono text-[10px] uppercase text-gray-500 hover:text-white transition-colors text-right"
                 >
                   Return to Archive
                 </button>

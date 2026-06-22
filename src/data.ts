@@ -38,7 +38,7 @@ export const PROJECTS: (Project & {
     image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=800",
     tech: ["React.js", "Node.js", "Express.js", "MongoDB"],
     githubUrl: "https://github.com/Tejraj24",
-    liveUrl: "https://github.com/Tejraj24",
+    liveUrl: "https://neon-chimera-ec94b3.netlify.app/",
     year: "2025",
     featured: false,
     role: "Full-Stack Developer",

@@ -102,7 +102,7 @@ export default function App() {
           <About onOpenResume={() => setIsResumeOpen(true)} />
 
           {/* Magazine-style Grid of Projects */}
-          <Projects />
+          <Projects onExploreProjects={() => setView('portfolio')} />
 
           {/* Narrative Core timeline experiences */}
           <Experience />

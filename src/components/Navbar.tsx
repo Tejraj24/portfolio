@@ -42,11 +42,16 @@ export default function Navbar({ activeSection, currentView, onViewChange, onNav
         behavior: 'smooth',
       });
     } else {
-      onViewChange('home');
-      // Wait slightly so the home container mounts before searching the DOM
-      setTimeout(() => {
+      if (currentView === 'portfolio') {
+        onViewChange('home');
+        // Wait for the home view components to fully mount in the DOM before scrolling
+        setTimeout(() => {
+          onNavigateToSection(id);
+        }, 200);
+      } else {
+        // Already on home view, scroll immediately
         onNavigateToSection(id);
-      }, 50);
+      }
     }
   };
 
