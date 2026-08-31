@@ -53,12 +53,12 @@ export default function Skills() {
         </div>
 
         {/* Categories navigation switcher side rail layout */}
-        <div className="flex flex-wrap lg:grid lg:grid-cols-2 gap-2 bg-white/70 dark:bg-neutral-900/60 p-3 rounded-4xl border border-border-custom dark:border-neutral-800 shadow-xs" id="skills-category-switcher">
+        <div className="flex flex-wrap gap-2 bg-white/70 dark:bg-neutral-900/60 p-3 rounded-4xl border border-border-custom dark:border-neutral-800 shadow-xs" id="skills-category-switcher">
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => setActiveCategory(cat.id as any)}
-              className={`flex items-center space-x-2.5 px-5 py-3 rounded-2xl font-mono text-xs uppercase font-medium tracking-wider transition-all duration-300 interactive-cursor ${
+              className={`flex items-center justify-center space-x-2 px-4 py-2.5 md:px-5 md:py-3 rounded-2xl font-mono text-[10px] md:text-xs uppercase font-medium tracking-wider transition-all duration-300 interactive-cursor whitespace-nowrap flex-grow sm:flex-grow-0 ${
                 activeCategory === cat.id
                   ? 'bg-black text-white dark:bg-white dark:text-black shadow-md'
                   : 'text-text-secondary hover:bg-bg-primary dark:hover:bg-neutral-800 hover:text-black dark:hover:text-white'

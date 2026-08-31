@@ -91,7 +91,7 @@ export default function Contact() {
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-16 items-start">
         
         {/* Left Side: Enormous Heading + Info links */}
-        <div className="xl:col-span-6 space-y-12" id="contact-coordinates">
+        <div className="xl:col-span-7 space-y-12 xl:pr-8 2xl:pr-12" id="contact-coordinates">
           <div className="space-y-4">
             <span className="font-mono text-xs text-gold-dark uppercase tracking-widest block font-semibold">GET IN CONTACT</span>
             <h2 className="font-display font-black text-5xl sm:text-6xl md:text-7xl xl:text-6xl 2xl:text-7xl text-black dark:text-white leading-tight tracking-tighter uppercase">
@@ -162,7 +162,7 @@ export default function Contact() {
         </div>
 
         {/* Right Side: Luxury submission input form with state handlers */}
-        <div className="xl:col-span-6" id="contact-form-portal">
+        <div className="xl:col-span-5" id="contact-form-portal">
           <div className="bg-white dark:bg-neutral-900 border border-border-custom dark:border-neutral-800 rounded-4xl p-8 md:p-12 shadow-xl relative overflow-hidden">
             
             {/* Embedded Header info inside card */}

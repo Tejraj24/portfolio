@@ -77,19 +77,14 @@ export default function TestimonialSection() {
             >
               {/* Luxury Glass Card */}
               <div className="bg-neutral-950/60 backdrop-blur-md border border-neutral-800/80 rounded-4xl p-8 md:p-12 relative overflow-hidden shadow-2xl">
-                {/* Background decorative Quotation Mark */}
-                <Quote className="absolute right-12 bottom-4 w-48 h-48 text-neutral-900/40 pointer-events-none select-none" />
 
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
                   {/* Avatar section */}
                   <div className="lg:col-span-3 flex flex-col items-center lg:items-start text-center lg:text-left space-y-4">
-                    <div className="relative w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-gold-accent to-neutral-800">
-                      <img
-                        src={testimonials[currentIndex].avatar}
-                        alt={`${testimonials[currentIndex].name}`}
-                        referrerPolicy="no-referrer"
-                        className="w-full h-full object-cover rounded-full select-none"
-                      />
+                    <div className="relative w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-gold-accent to-neutral-800 flex items-center justify-center">
+                      <div className="w-full h-full bg-neutral-900 rounded-full flex items-center justify-center">
+                        <User className="w-10 h-10 text-gray-400" />
+                      </div>
                     </div>
                     <div>
                       <h4 className="font-display font-black text-xl text-white tracking-tight">
@@ -106,7 +101,6 @@ export default function TestimonialSection() {
 
                   {/* Feedback feedback */}
                   <div className="lg:col-span-9 flex flex-col justify-center h-full">
-                    <Quote className="w-8 h-8 text-gold-accent mb-6" />
                     <blockquote className="font-sans text-base sm:text-lg md:text-xl text-gray-300 italic font-light leading-relaxed">
                       "{testimonials[currentIndex].content}"
                     </blockquote>
